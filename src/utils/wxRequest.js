@@ -18,5 +18,6 @@ const wxRequest = (url, params = {}) => {
     })
 }
 
+
 // 导出封装的方法
 export default wxRequest

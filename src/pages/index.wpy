@@ -1,66 +1,65 @@
 <style lang="less">
+// 轮播图区域
+.swiper {
+  width: 750rpx;
+  height: 340rpx;
 
-  // 轮播图区域
-  .swiper {
+  &-img {
     width: 750rpx;
     height: 340rpx;
+  }
+}
 
+// 导航栏区域
+.nav {
+  background-color: #fff;
+  display: flex;
+
+  &-item {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    padding: 24rpx 0 30rpx;
+  }
+
+  &-img {
+    width: 128rpx;
+    height: 140rpx;
+  }
+}
+
+// 广告区域
+.floor {
+  &-head {
     &-img {
       width: 750rpx;
-      height: 340rpx;
+      height: 60rpx;
     }
   }
 
-  // 导航栏区域
-  .nav {
+  &-body {
     background-color: #fff;
     display: flex;
+    padding: 20rpx 16rpx 10rpx 16rpx;
 
-    &-item {
-      flex: 1;
+    &-left,
+    &-left-img {
+      width: 232rpx;
+      height: 386rpx;
+    }
+
+    &-right {
       display: flex;
-      justify-content: center;
-      padding: 24rpx 0 30rpx;
-    }
+      flex-wrap: wrap;
 
-    &-img {
-      width: 128rpx;
-      height: 140rpx;
-    }
-  }
-
-  // 广告区域
-  .floor {
-    &-head {
       &-img {
-        width: 750rpx;
-        height: 60rpx;
-      }
-    }
-
-    &-body {
-      background-color: #fff;
-      display: flex;
-      padding: 20rpx 16rpx 10rpx 16rpx;
-
-      &-left,
-      &-left-img {
-        width: 232rpx;
-        height: 386rpx;
-      }
-
-      &-right {
-        display: flex;
-        flex-wrap: wrap;
-
-        &-img {
-          width: 233rpx;
-          height: 188rpx;
-          margin: 0 0 10rpx 10rpx;
-        }
+        width: 233rpx;
+        height: 188rpx;
+        margin: 0 0 10rpx 10rpx;
       }
     }
   }
+}
 </style>
 <template>
 
@@ -79,69 +78,74 @@
 
   <!-- 导航区域 -->
   <view class="nav">
-    <navigator class="nav-item" hover-class="none">
-      <image  class="nav-img" src="/upload/icon_index_nav_1@2x.png" />
-    </navigator>
-    <navigator class="nav-item" hover-class="none">
-      <image  class="nav-img" src="/upload/icon_index_nav_2@2x.png" />
-    </navigator>
-    <navigator class="nav-item" hover-class="none">
-      <image  class="nav-img" src="/upload/icon_index_nav_3@2x.png" />
-    </navigator>
-    <navigator class="nav-item" hover-class="none">
-      <image  class="nav-img" src="/upload/icon_index_nav_4@2x.png" />
-    </navigator>
+    <block wx:for="{{ navArr }}" wx:key="index">
+      <navigator class="nav-item" hover-class="none" url="{{ item.navigator_url }}" open-type="{{ item.open_type }}">
+        <image class="nav-img" src="{{ item.image_src }}"></image>
+      </navigator>
+    </block>
   </view>
 
-  <!-- 广告层 -->
-  <view class="floor">
-    <view class="floor-head">
-      <image class="floor-head-img" src="/upload/pic_floor01_title@2x.png"></image>
-    </view>
 
-    <view class="floor-body">
-      <view class="floor-body-left">
-        <navigator>
-          <image class="floor-body-left-img" src="/upload/pic_floor01_1@2x.png"></image>
-        </navigator>
+  <block wx:for="{{ floorArr }}" wx:key="index">
+    <view class="floor">
+      <view class="floor-head">
+        <image class="floor-head-img" src="{{ item.floor_title.image_src }}"></image>
       </view>
-      <view class="floor-body-right">
-        <navigator>
-          <image class="floor-body-right-img" src="/upload/pic_floor01_2@2x.png"></image>
-        </navigator>
-        <navigator>
-          <image class="floor-body-right-img" src="/upload/pic_floor01_3@2x.png"></image>
-        </navigator>
-        <navigator>
-          <image class="floor-body-right-img" src="/upload/pic_floor01_4@2x.png"></image>
-        </navigator>
-        <navigator>
-          <image class="floor-body-right-img" src="/upload/pic_floor01_5@2x.png"></image>
-        </navigator>
+
+      <view class="floor-body">
+
+        <view class="floor-body-left">
+          <navigator url="{{ item.product_list[0].navigator_url }}"  open-type="{{ item.product_list[0].open_type }}">
+            <image class="floor-body-left-img" src="{{ item.product_list[0].image_src }}"></image>
+          </navigator>
+        </view>
+
+        <view class="floor-body-right">
+          <block wx:for="{{ item.product_list }}" wx:key="index" wx:if="{{ index > 0 }}">
+            <navigator url="{{ item.navigator_url }}" open-type="{{ item.open_type }}">
+              <image class="floor-body-right-img" src="{{ item.image_src }}" style="width:{{ item.image_width }}rpx" ></image>
+            </navigator>
+          </block>
+        </view>
+        
       </view>
     </view>
+  </block>
+
   </view>
 
 </template>
 
 <script>
-  import wepy from 'wepy'
-  import { getHomeSwiper } from '../api/api.js'
+import wepy from 'wepy';
+import { getHomeSwiper, getHomeNav, getHomFloor } from '../api/api.js';
 
-  export default class Index extends wepy.page {
-    config = {
-      navigationBarTitleText: 'test'
-    }
+export default class Index extends wepy.page {
+  config = {
+    navigationBarTitleText: 'test'
+  };
 
-    data = {
-      swiperArr: []
-    }
+  data = {
+    swiperArr: [],
+    navArr: [],
+    floorArr: []
+  };
 
-    onLoad() {
-      getHomeSwiper().then(res => {
-        this.swiperArr = res.data
-        this.$apply();
-      })
-    }
+  onLoad() {
+    getHomeSwiper().then(res => {
+      this.swiperArr = res.data;
+      this.$apply();
+    });
+
+    getHomeNav().then(res => {
+      this.navArr = res.data;
+      this.$apply();
+    });
+
+    getHomFloor().then(res => {
+      this.floorArr = res.data;
+      this.$apply();
+    });
   }
+}
 </script>

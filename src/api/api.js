@@ -7,3 +7,18 @@ export const getHomeSwiper = params => {
         return res.data
     })
 }
+
+// 首页导航接口
+export const getHomeNav = params => {
+    return wxRequest('home/catitems', params).then(res => {
+        return res.data
+    })
+}
+
+
+// 首页楼层接口
+export const getHomFloor = params => {
+    return wxRequest('home/floordata', params).then(res => {
+        return res.data
+    })
+}
