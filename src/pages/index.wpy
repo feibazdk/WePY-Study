@@ -1,7 +1,7 @@
 <style lang="less">
 
   // 轮播图区域
-  .switch {
+  .swiper {
     width: 750rpx;
     height: 340rpx;
 
@@ -28,21 +28,52 @@
       height: 140rpx;
     }
   }
+
+  // 广告区域
+  .floor {
+    &-head {
+      &-img {
+        width: 750rpx;
+        height: 60rpx;
+      }
+    }
+
+    &-body {
+      background-color: #fff;
+      display: flex;
+      padding: 20rpx 16rpx 10rpx 16rpx;
+
+      &-left,
+      &-left-img {
+        width: 232rpx;
+        height: 386rpx;
+      }
+
+      &-right {
+        display: flex;
+        flex-wrap: wrap;
+
+        &-img {
+          width: 233rpx;
+          height: 188rpx;
+          margin: 0 0 10rpx 10rpx;
+        }
+      }
+    }
+  }
 </style>
 <template>
 
   <!-- 轮播图区域 -->
   <view>
-    <swiper class="switch" indicator-dots autoplay circular>
+    <swiper class="swiper" indicator-dots autoplay circular indicator-color="rgba(255,255,255,0.2)" indicator-active-color="#fff">
+      <block wx:for="{{ swiperArr }}" wx:key="index">
         <swiper-item>
-          <image  class="switch-img" src="/upload/banner1.png" />
+          <navigator url="{{ item.navigator_url }}" open-type="{{ item.open_type }}">
+            <image class="swiper-img" src="{{ item.image_src }}"></image>
+          </navigator>
         </swiper-item>
-        <swiper-item>
-          <image  class="switch-img" src="/upload/banner2.png" />
-        </swiper-item>
-        <swiper-item>
-          <image  class="switch-img" src="/upload/banner3.png" />
-        </swiper-item>
+      </block>
     </swiper>
   </view>
 
@@ -62,6 +93,35 @@
     </navigator>
   </view>
 
+  <!-- 广告层 -->
+  <view class="floor">
+    <view class="floor-head">
+      <image class="floor-head-img" src="/upload/pic_floor01_title@2x.png"></image>
+    </view>
+
+    <view class="floor-body">
+      <view class="floor-body-left">
+        <navigator>
+          <image class="floor-body-left-img" src="/upload/pic_floor01_1@2x.png"></image>
+        </navigator>
+      </view>
+      <view class="floor-body-right">
+        <navigator>
+          <image class="floor-body-right-img" src="/upload/pic_floor01_2@2x.png"></image>
+        </navigator>
+        <navigator>
+          <image class="floor-body-right-img" src="/upload/pic_floor01_3@2x.png"></image>
+        </navigator>
+        <navigator>
+          <image class="floor-body-right-img" src="/upload/pic_floor01_4@2x.png"></image>
+        </navigator>
+        <navigator>
+          <image class="floor-body-right-img" src="/upload/pic_floor01_5@2x.png"></image>
+        </navigator>
+      </view>
+    </view>
+  </view>
+
 </template>
 
 <script>
@@ -71,8 +131,22 @@
     config = {
       navigationBarTitleText: 'test'
     }
+
+    data = {
+      swiperArr: []
+    }
+
     onLoad() {
-      console.log('onLoad')
+      // console.log('onLoad')
+      wepy.request({
+        url: 'https://mina.itjustfun.cn/api/public/v1/home/swiperdata',
+        method: 'GET',
+        dataType: 'json',
+        success: res => {
+          this.swiperArr = res.data.data;
+          this.$apply();
+        }
+      })
     }
   }
 </script>
