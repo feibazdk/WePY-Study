@@ -12,14 +12,24 @@
 
 <script>
 import wepy from 'wepy'
+import 'wepy-async-function'
 
 export default class extends wepy.app {
+
+  constructor () {
+    super()
+    this.use('promisify')
+  }
+
   config = {
     pages: [
       'pages/index',
       'pages/category',
       'pages/cart',
-      'pages/me'
+      'pages/me',
+      'pages/order',
+      'pages/goods_detail',
+      'pages/goods_list'
     ],
     window: {
       backgroundTextStyle: 'light',

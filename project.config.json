@@ -2,7 +2,7 @@
 	"description": "wepystudy",
 	"setting": {
 		"urlCheck": false,
-		"es6": true,
+		"es6": false,
 		"postcss": true,
 		"minified": true,
 		"newFeature": true
@@ -10,6 +10,6 @@
 	"compileType": "miniprogram",
 	"appid": "wxa0eb046247fdb7ba",
 	"projectname": "001_wepyshop",
-	"miniprogramRoot": "./dist",
+	"miniprogramRoot": "dist/",
 	"condition": {}
 }

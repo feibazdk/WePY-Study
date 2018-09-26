@@ -126,6 +126,7 @@
 
 <script>
   import wepy from 'wepy'
+  import { getHomeSwiper } from '../api/api.js'
 
   export default class Index extends wepy.page {
     config = {
@@ -137,15 +138,9 @@
     }
 
     onLoad() {
-      // console.log('onLoad')
-      wepy.request({
-        url: 'https://mina.itjustfun.cn/api/public/v1/home/swiperdata',
-        method: 'GET',
-        dataType: 'json',
-        success: res => {
-          this.swiperArr = res.data.data;
-          this.$apply();
-        }
+      getHomeSwiper().then(res => {
+        this.swiperArr = res.data
+        this.$apply();
       })
     }
   }
