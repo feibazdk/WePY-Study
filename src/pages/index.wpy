@@ -60,6 +60,32 @@
     }
   }
 }
+
+.to-top {
+  width: 90rpx;
+  height: 90rpx;
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  position: fixed;
+  right: 30rpx;
+  bottom: 90rpx;
+  // 1.0 把当前盒子设置成伸缩盒模式
+  display: flex;
+  // 2.0 设置主轴方法
+  flex-direction: column;
+  // 3.0 主轴对齐方式
+  justify-content: center;
+  // 4.0 交叉轴对齐方式
+  align-items: center;
+  &-img {
+    width: 24rpx;
+    height: 14rpx;
+  }
+  &-txt {
+    margin-top: 5rpx;
+    color: #666;
+  }
+}
 </style>
 <template>
 
@@ -112,6 +138,10 @@
     </view>
   </block>
 
+    <!-- 返回顶部 -->
+  <view class="to-top" @tap="toTopHandle">
+    <image class="to-top-img" src="/images/arrow_top@2x.png"></image>
+    <view class="to-top-txt">顶部</view>
   </view>
 
 </template>
@@ -130,6 +160,16 @@ export default class Index extends wepy.page {
     navArr: [],
     floorArr: []
   };
+
+  methods = {
+    toTopHandle() {
+      // console.log('你点击了盒子')
+      wepy.pageScrollTo({
+        scrollTop: 0,
+        duration: 300
+      })
+    }
+  }
 
   onLoad() {
     getHomeSwiper().then(res => {
