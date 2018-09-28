@@ -236,19 +236,21 @@
     interval="2500"
     autoplay="true"
     circular="true">
-      <swiper-item>
-        <image class="swiper-img" src="http://pfrqd1ygg.bkt.clouddn.com/detail_banner@2x.png" />
-      </swiper-item>
+      <block wx:for="{{ goodsDetail.pics }}" wx:key="index">
+        <swiper-item @tap="previewImagefunc({{ item.pics_big }})">
+          <image class="swiper-img" src="{{ item.pics_big }}" />
+        </swiper-item>
+      </block>
   </swiper>
   
   <!-- 标题与价格等等 -->
   <view class="product-info">
     <view class="product-head">
-        <text class="price">￥248</text>
+        <text class="price">￥{{ goodsDetail.goods_price }}</text>
     </view>
     <view class="product-body">
       <view class="product-name">
-        我是一个布娃娃
+        {{ goodsDetail.goods_name }}
       </view>
       <view class="product-like">
         <view class="iconfont icon-shoucang"></view>
@@ -339,13 +341,34 @@ export default class GoodsDetail extends wepy.page {
     goodsDetail: null // 商品详情页数据
   };
 
-  methods = {};
+  methods = {
+    previewImagefunc(currentImg) {
+
+      // 定义一个数据，接收轮播图数据
+      let previewImageArr = []
+
+      // 对数据遍历，拼接数据
+      this.goodsDetail.pics.forEach((item, index) => {
+        previewImageArr.push(item.pics_big)
+      })
+
+      // 预览图片
+      wepy.previewImage({
+        current: currentImg,
+        urls: previewImageArr
+      })
+
+    }
+  };
 
   onLoad() {
     // 获取商品详情页数据
     getGoodsDetail({ data: { goods_id: 55578 } }).then(res => {
       this.goodsDetail = res.data;
       this.$apply();
+
+      console.log(this.goodsDetail);
+      
     });
   }
 }
