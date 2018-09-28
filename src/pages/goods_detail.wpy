@@ -284,17 +284,17 @@
   <!-- 规格详情以及规格参数 -->
   <view class="tabs">
     <view class="tabs-head">
-      <view class="tabs-item">图文详情</view>
-      <view class="tabs-item active">规格参数</view>
+      <view class="tabs-item {{ activeTab == 0 ? 'active' : '' }}" @tap="switchTabFunc({{ 0 }})">图文详情</view>
+      <view class="tabs-item {{ activeTab == 1 ? 'active' : '' }}" @tap="switchTabFunc({{ 1 }})">规格参数</view>
     </view>
     <view class="tabs-body">
-      <view class="tabs-content">
+      <view class="tabs-content" hidden="{{ activeTab != 0 }}">
         <!-- 引入模板 -->
         <import src="/plugins/wxParse/wxParse.wxml"/>
         <!-- 这里data中article为bindName -->
         <template is="wxParse" data="{{wxParseData:article.nodes}}"/>
       </view>
-      <view class="tabs-content" style="display: none">
+      <view class="tabs-content" hidden="{{ activeTab != 1 }}">
         <block wx:for="{{ goodsDetail.attrs }}" wx:key="index">
           <view class="param-item">
             <text class="note">{{ item.attr_name }}：</text>
@@ -337,10 +337,13 @@ export default class GoodsDetail extends wepy.page {
   };
 
   data = {
-    goodsDetail: null // 商品详情页数据
+    goodsDetail: null,   // 商品详情页数据
+    activeTab: 0         // 激活 tab
   };
 
   methods = {
+
+    // 预览图片
     previewImagefunc(currentImg) {
 
       // 定义一个数据，接收轮播图数据
@@ -357,7 +360,15 @@ export default class GoodsDetail extends wepy.page {
         urls: previewImageArr
       })
 
+    },
+
+    // tab 切换
+    switchTabFunc(val) {
+      console.log(val);
+      this.activeTab = val;
+      
     }
+
   };
 
   onLoad() {
