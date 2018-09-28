@@ -1,3 +1,2 @@
-# wepy-study
+# wepy 电商项目
 
-## wepy 电商项目
