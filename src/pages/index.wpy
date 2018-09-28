@@ -61,6 +61,7 @@
   }
 }
 
+// 点击回到顶部
 .to-top {
   width: 90rpx;
   height: 90rpx;
@@ -86,8 +87,25 @@
     color: #666;
   }
 }
+
+// 底部区域
+.end-tips {
+  display: flex;
+  justify-content: center;
+  color: 999;
+  height:68rpx;
+  margin-top:30rpx;
+
+
+  .icon-xiao {
+    margin-right: 10rpx;
+  }
+}
 </style>
 <template>
+
+  <!-- 搜索组件 -->
+  <SearchBar></SearchBar>
 
   <!-- 轮播图区域 -->
   <view>
@@ -144,22 +162,33 @@
     <view class="to-top-txt">顶部</view>
   </view>
 
+  <view class="end-tips">
+    <view class="iconfont icon-xiao"></view>
+    <view class="end-tips-txt">我是有底线的</view>
+  </view>
+
+
 </template>
 
 <script>
 import wepy from 'wepy';
+import SearchBar from '../component/search_bar';    // 导入搜索组件
 import { getHomeSwiper, getHomeNav, getHomFloor } from '../api/api.js';
 
 export default class Index extends wepy.page {
   config = {
-    navigationBarTitleText: 'test'
+    navigationBarTitleText: '一杆梅子酒'
   };
 
   data = {
     swiperArr: [],
     navArr: [],
     floorArr: []
-  };
+  }
+
+  components = {
+    SearchBar
+  }
 
   methods = {
     toTopHandle() {

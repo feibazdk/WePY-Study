@@ -1,4 +1,6 @@
 <style lang="less">
+  @import '/style/iconfont.wxss';
+
   page {
     background-color: #f4f4f4;
     font-size: 24rpx;
@@ -13,6 +15,7 @@
 <script>
 import wepy from 'wepy'
 import 'wepy-async-function'
+
 
 export default class extends wepy.app {
 
