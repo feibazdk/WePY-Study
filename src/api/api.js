@@ -22,3 +22,10 @@ export const getHomFloor = params => {
         return res.data
     })
 }
+
+// 商品详情页
+export const getGoodsDetail = params => {
+    return wxRequest('goods/detail', params).then(res => {
+        return res.data
+    })
+}
