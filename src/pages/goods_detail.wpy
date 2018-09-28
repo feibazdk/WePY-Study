@@ -1,6 +1,5 @@
 <style lang="less">
-//在使用的Wxss中引入WxParse.css,可以在app.wxss
-@import "/wxParse/wxParse.wxss";
+@import '../plugins/wxParse/wxParse.wxss';
 
 .swiper,
 .swiper-img {
