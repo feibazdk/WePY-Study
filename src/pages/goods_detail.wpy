@@ -283,8 +283,11 @@
   <!-- 规格详情以及规格参数 -->
   <view class="tabs">
     <view class="tabs-head">
-      <view class="tabs-item {{ activeTab == 0 ? 'active' : '' }}" @tap="switchTabFunc({{ 0 }})">图文详情</view>
-      <view class="tabs-item {{ activeTab == 1 ? 'active' : '' }}" @tap="switchTabFunc({{ 1 }})">规格参数</view>
+
+      <block wx:for="{{ tabList }}" wx:key="index">
+        <view class="tabs-item {{ activeTab == index ? 'active' : '' }}" @tap="switchTabFunc({{ index }})">{{ item }}</view>
+      </block>
+      <!-- <view class="tabs-item {{ activeTab == 1 ? 'active' : '' }}" @tap="switchTabFunc({{ 1 }})">规格参数</view> -->
     </view>
     <view class="tabs-body">
       <view class="tabs-content" hidden="{{ activeTab != 0 }}">
@@ -311,7 +314,7 @@
       <view class="iconfont icon-kefu"></view>
       <text class="item-note">联系客服</text>
     </view>
-    <view class="item">
+    <view class="item" @tap="toCartTabBar">
       <view class="iconfont icon-gouwuche"></view>
       <text class="item-note">购物车</text>
     </view>
@@ -337,7 +340,8 @@ export default class GoodsDetail extends wepy.page {
 
   data = {
     goodsDetail: null,   // 商品详情页数据
-    activeTab: 0         // 激活 tab
+    activeTab: 0,         // 激活 tab
+    tabList: ['图文详情', '规格参数']
   };
 
   methods = {
@@ -365,14 +369,20 @@ export default class GoodsDetail extends wepy.page {
     switchTabFunc(val) {
       console.log(val);
       this.activeTab = val;
-      
-    }
+    },
+
+    // 跳转到购物车
+    toCartTabBar() {
+      wepy.switchTab({ url: '/pages/cart' });
+    },
+
+    wxParseImgLoad() {}
 
   };
 
-  onLoad() {
+  onLoad(options) {
     // 获取商品详情页数据
-    getGoodsDetail({ data: { goods_id: 17927 } }).then(res => {
+    getGoodsDetail({ data: { goods_id: options.goods_id } }).then(res => {
       this.goodsDetail = res.data;
       this.$apply();
 
