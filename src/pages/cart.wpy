@@ -307,28 +307,28 @@
         <text class="shop-name">优购生活馆</text>
       </view>
     </view>
-    <block>
+    <block wx:for="{{cartDataArr}}" wx:key="index">
       <view class="product-item">
-        <view  class="iconfont-tap icon-xuanze icon-xuanze-fill"></view>
+        <view  class="iconfont-tap icon-xuanze {{ item.selectStatus ? 'icon-xuanze-fill' : '' }}"></view>
         <navigator url="" class="product-left">
-          <image class="product-img" src="../images/place_holder@2x.png" />
+          <image class="product-img" src="{{ item.goods_small_logo }}" />
         </navigator>
         <view class="product-right">
           <navigator url="" class="product-name">
-            汉唐古风
+            {{ item.goods_name }}
           </navigator>
           <view class="product-detail">
             <!-- 商品简介 -->
           </view>
           <view class="product-price">
             <text class="product-price-symbol">￥</text>
-            <text class="product-price-integer">279</text>
+            <text class="product-price-integer">{{item.goods_price}}</text>
             <text class="product-price-decimal">.00</text>
           </view>
           <view class="product-count-edit">
-            <view class="count-min">-</view>
-            <input class="count-number" type="number" value="1" />
-            <view class="count-add">+</view>
+            <view class="count-min" @tap="countNumberTapFunc({{index}},{{-1}})">-</view>
+            <input class="count-number" @input="countNumberFunc({{index}})" type="number" value="{{ item.goods_number }}" />
+            <view class="count-add" @tap="countNumberTapFunc({{index}},{{1}})">+</view>
           </view>
         </view>
       </view>
@@ -370,8 +370,66 @@ export default class Cart extends wepy.page {
   config = {
     navigationBarTitleText: '购物车'
   };
+
+  data = {
+    cartDataArr: [] // 商品的数据
+  };
+
+  methods = {
+    // 加减商品的数量
+    countNumberTapFunc(index, addSubtraction) {
+      // 根据索引查找到商品，修改价格
+      this.cartDataArr[index].goods_number += addSubtraction;
+
+      if (this.cartDataArr[index].goods_number <= 1) {
+        wepy
+          .showModal({
+            content: '是否要删除该商品', //提示的内容,
+            showCancel: true, //是否显示取消按钮,
+            cancelText: '取消', //取消按钮的文字，默认为取消，最多 4 个字符,
+            confirmText: '确定', //确定按钮的文字，默认为取消，最多 4 个字符,
+            confirmColor: '#3CC51F' //确定按钮的文字颜色,
+          })
+          .then(res => {
+            // 用户点击了确定
+            if (res.confirm) {
+              this.cartDataArr.splice(index, 1);
+            }
+            // 用户点击了取消
+            else if (res.cancel) {
+              this.cartDataArr[index].goods_number = 1;
+            }
+            // 异步回调中修改，需要调用 this.$apply();
+            this.$apply();
+          });
+      }
+    },
+
+    // 商品数量输入框的事件
+    countNumberFunc(index, event) {
+      // 获取输入框的值
+      let inputNumber = parseInt(event.detail.value)
+
+      // 把商品数量旧值保存起来
+      let oldInputNumber = this.cartDataArr[index].goods_number
+
+      // 对输入的数值进行判断
+      // 若不合法返回旧值， 合法则返回输入的值
+      if(inputNumber < 1 || isNaN(inputNumber)) {
+        return oldInputNumber
+      }else {
+        this.cartDataArr[index].goods_number = inputNumber;
+      }
+    }
+  };
+
   onLoad() {
     console.log('onLoad');
+  }
+
+  onShow() {
+    // 本地数据取出并赋值
+    this.cartDataArr = wepy.getStorageSync('cartDataArr');
   }
 }
 </script>

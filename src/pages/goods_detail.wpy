@@ -413,6 +413,15 @@ export default class GoodsDetail extends wepy.page {
 
       // 将当前的商品保存到本地
       wepy.setStorageSync('cartDataArr', getCartDataArr);
+
+      // 添加成功后提示
+      wepy.showToast({
+        title: '添加成功',   //提示的内容,
+        icon: 'success',    //图标,
+        duration: 1500,     //延迟时间,
+        mask: true,         //显示透明蒙层，防止触摸穿透
+      });
+      
     },
 
     wxParseImgLoad() {}
