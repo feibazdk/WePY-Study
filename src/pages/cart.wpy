@@ -309,7 +309,7 @@
     </view>
     <block wx:for="{{cartDataArr}}" wx:key="index">
       <view class="product-item">
-        <view  class="iconfont-tap icon-xuanze {{ item.selectStatus ? 'icon-xuanze-fill' : '' }}"></view>
+        <view @tap="switchSelectStatus({{index}})"  class="iconfont-tap icon-xuanze {{ item.selectStatus ? 'icon-xuanze-fill' : '' }}"></view>
         <navigator url="/pages/goods_detail?goods_id={{ item.goods_id }}" class="product-left">
           <image class="product-img" src="{{ item.goods_small_logo }}" />
         </navigator>
@@ -336,7 +336,7 @@
   </view>
   <view class="bottom-space"></view>
   <view class="fixed-bar">
-    <view class="iconfont-tap icon-xuanze icon-xuanze-fill"></view>
+    <view @tap="selectAllHandle({{ selectStatusCount == cartDataArr.length }})" class="iconfont-tap icon-xuanze {{ selectStatusCount == cartDataArr.length ? 'icon-xuanze-fill':'' }}"></view>
     <text class="select-all">全选</text>
     <view class="total">
       <view class="total">
@@ -372,8 +372,30 @@ export default class Cart extends wepy.page {
   };
 
   data = {
-    cartDataArr: [] // 商品的数据
+    cartDataArr: [],   // 商品的数据
+    selectStatusCount: 0,  // 被选中的商品数量 
+    totalPrice: 0
   };
+
+  computed = {
+    cartDataArr() {
+      // 重置数据
+      this.selectStatusCount = 0;   // 累加
+      this.totalPrice = 0;          // 重置总金额
+
+      // cartDataArr 发生变化，对 cartDataArr 更新
+      this.cartDataArr.forEach(item => {
+        // 遍历后查看当前商品是否被选中
+        if(item.selectStatus === true) {
+          this.selectStatusCount++
+          this.totalPrice += item.goods_number * item.goods_price
+        }
+      })
+
+      // 返回值变化后的商品数据
+      return this.cartDataArr
+    }
+  }
 
   methods = {
     // 加减商品的数量
@@ -420,6 +442,22 @@ export default class Cart extends wepy.page {
       }else {
         this.cartDataArr[index].goods_number = inputNumber;
       }
+    },
+
+    // 单选切换状态
+    switchSelectStatus(index) {
+      this.cartDataArr[index].selectStatus = !this.cartDataArr[index].selectStatus
+    },
+
+    // 全选事件
+    selectAllHandle(selectAllStatus) {
+
+      console.log("===============");
+      
+
+      this.cartDataArr.forEach(item => {
+        item.selectStatus = !selectAllStatus
+      })
     }
   };
 
