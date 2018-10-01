@@ -29,3 +29,8 @@ export const getGoodsDetail = params => {
         return res.data
     })
 }
+
+// 微信登录换取 Token
+export const postUsersWxLogin = params => {
+  return wxRequest('users/wxlogin', params).then(res => res.data)
+}

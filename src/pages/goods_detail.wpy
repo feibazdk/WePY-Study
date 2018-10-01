@@ -274,10 +274,12 @@
     </view>
   </view>
   <view class="part">
-    <view class="part-item">
-      <text class="note">送至</text><text class="description">安徽省合肥市蜀山区华府骏苑</text>
-      <view class="iconfont icon-jiantouyou"></view>
-    </view>
+    <Address :userAddress="addressPage">
+      <view class="part-item">
+        <text class="note">送至</text><text class="description">{{ addressPage.userAddressMerge }}</text>
+        <view class="iconfont icon-jiantouyou"></view>
+      </view>
+    </Address>
   </view>
 
   <!-- 规格详情以及规格参数 -->
@@ -329,6 +331,7 @@
 import wepy from 'wepy';
 // 导入 api 文件
 import { getGoodsDetail } from '../api/api';
+import Address from '../component/address';
 
 //在使用的View中引入WxParse模块
 var WxParse = require('../plugins/wxParse/wxParse.js');
@@ -341,8 +344,13 @@ export default class GoodsDetail extends wepy.page {
   data = {
     goodsDetail: null, // 商品详情页数据
     activeTab: 0, // 激活 tab
-    tabList: ['图文详情', '规格参数']
+    tabList: ['图文详情', '规格参数'],
+    addressPage: null
   };
+
+  components = {
+    Address
+  }
 
   methods = {
     // 预览图片

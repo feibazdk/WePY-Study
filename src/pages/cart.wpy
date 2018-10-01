@@ -344,21 +344,21 @@
           <view class="total-note">合计：</view>
           <view class="product-price">
             <text class="product-price-symbol">￥</text>
-            <text class="product-price-integer">100</text>
+            <text class="product-price-integer">{{ totalPrice }}</text>
             <text class="product-price-decimal">.00</text>
           </view>
         </view>
         <view class="total-foot">包含运费</view>
       </view>
     </view>
-    <navigator url="" class="buy-button">
-      结算(100)
+    <navigator url="/pages/cart_order" class="buy-button">
+      结算({{ selectStatusCount }})
     </navigator>
   </view>
   </block>
   <block>
     <text>购物车为空</text>
-    <navigator url="" open-type="switchTab" >返回首页逛一下</navigator>
+    <navigator url="/pages/index" open-type="switchTab">返回首页逛一下</navigator>
   </block>
   <!-- </view> -->
 </template>
@@ -468,6 +468,10 @@ export default class Cart extends wepy.page {
   onShow() {
     // 本地数据取出并赋值
     this.cartDataArr = wepy.getStorageSync('cartDataArr');
+  }
+
+  onHide() {
+    wepy.setStorageSync("cartDataArr", this.cartDataArr)
   }
 }
 </script>

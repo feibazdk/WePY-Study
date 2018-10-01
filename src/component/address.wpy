@@ -1,0 +1,52 @@
+<style lang="less">
+</style>
+
+<template>
+  <view class="address-wrap" @tap="chooseAddress">
+    <slot>地址选择管理</slot>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+
+export default class Address extends wepy.component {
+
+  props = {
+    userAddress: {
+      type: Object,
+      twoWay: true
+    }
+  }
+
+  computed = {
+    userAddress() {
+      if (this.userAddress) {
+
+        let userAddressMerge = `${this.userAddress.provinceName}${
+          this.userAddress.cityName
+        }${this.userAddress.countyName}${this.userAddress.detailInfo}`
+        
+        this.userAddress.userAddressMerge = userAddressMerge
+      }
+      
+      return this.userAddress
+    }
+  }
+
+  methods = {
+    chooseAddress() {
+      wepy.chooseAddress().then(res => {
+        this.userAddress = res
+        this.$apply()
+
+        wepy.setStorageSync('userAddress', this.userAddress)
+      })
+    }
+  }
+  
+  onLoad() {
+    this.userAddress = wepy.getStorageSync('userAddress') || null;
+  }
+}
+</script>
